@@ -26,15 +26,16 @@ app.get("/api/notes", function(req, res){
 });
 
 app.post("/api/notes", async function(req, res){
-    let newNote = req.body;
-    console.log(newNote);
+  let newNote = req.body;
+  console.log(newNote);
     try {
-        let notes = await readFileAsync("db/db.json", "utf8");
-        notes = JSON.parse(notes);
-        notes.push(newNote);
-
-        newNote.id = 52345
-
+      let notes = await readFileAsync("db/db.json", "utf8");
+      notes = JSON.parse(notes);
+      notes.push(newNote);
+      
+      for (let i = 0; i < notes.length; i++){
+        notes[i].id= i + 1;
+      }      
         await writeFileAsync("db/db.json", JSON.stringify(notes));
 
         res.json(newNote);
@@ -44,7 +45,9 @@ app.post("/api/notes", async function(req, res){
 })
 
 app.delete("api/notes/:id", function(req, res){
-    //req.params
+
+// const updatedNotes = notes.filter(note => note.id != TODO:deletedId);
+
 })
 
 //HTML routes
