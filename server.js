@@ -36,7 +36,7 @@ app.post("/api/notes", async function(req, res){
       for (let i = 0; i < notes.length; i++){
         notes[i].id= i + 1;
       }      
-        await writeFileAsync("db/db.json", JSON.stringify(notes));
+        await writeFileAsync("db/db.json", JSON.stringify(notes, null, 2));
 
         res.json(newNote);
     } catch(err){
@@ -44,11 +44,18 @@ app.post("/api/notes", async function(req, res){
     }
 })
 
-app.delete("api/notes/:id", function(req, res){
+app.delete("/api/notes/:id", function(req, res) {
 
-// const updatedNotes = notes.filter(note => note.id != TODO:deletedId);
-
-})
+  const idDelete = parseInt(req.params.id);
+  let database = JSON.parse(fs.readFileSync("./db/db.json", "utf-8"));
+  const filteredArray = database.filter(note => note.id !== idDelete);
+  const stringedDB = JSON.stringify(filteredArray);
+  fs.writeFile("./db/db.json", stringedDB, "utf8", (err, data) => {
+    if (err) throw err;
+    console.log("note has been deleted");
+  });
+  res.json(filteredArray);
+});
 
 //HTML routes
 
